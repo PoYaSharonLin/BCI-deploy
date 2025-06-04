@@ -121,8 +121,8 @@ def display_evaluation_metrics(avg_test_loss, all_labels, all_preds):
     st.plotly_chart(fig_metrics)
 
 # Streamlit app
-st.title("CNN Model Evaluation")
-st.write("Evaluate the trained CNN model on the test dataset using 3-fold cross-validation.")
+st.title("RAW CNN Model Evaluation")
+st.write("Evaluate the trained CNN model. The .npy file should be trained based on the CNN model structure in this repo: https://github.com/NitzanBar1/EEGClassification")
 
 # File uploaders for test data
 cleaned_eeg_file = st.file_uploader("Upload cleaned EEG data (.npy)...", type=["npy"])
@@ -160,7 +160,7 @@ if cleaned_eeg_file is not None and labels_file is not None:
         st.stop()
 
     # Load the model
-    model_path = "model_cnn.pth"
+    model_path = "model_cnn_raw.pth"
     try:
         model = load_model(model_path, n_ch, n_times, n_classes)
     except Exception as e:

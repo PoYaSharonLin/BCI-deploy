@@ -70,8 +70,7 @@ cleaned_eeg_file = st.file_uploader("Upload cleaned EEG data (.npy)...", type=["
 labels_file = st.file_uploader("Upload labels (.npy)...", type=["npy"])
 
 # Model parameters
-n_ch = st.number_input("Number of EEG channels", min_value=1, value=64, step=1)
-n_times = st.number_input("Number of time points", min_value=1, value=1000, step=1)
+n_ch = st.number_input("Number of EEG channels", min_value=1, value=14, step=1)
 n_classes = st.number_input("Number of classes", min_value=2, value=10, step=1)
 
 if cleaned_eeg_file is not None and labels_file is not None:
@@ -83,8 +82,11 @@ if cleaned_eeg_file is not None and labels_file is not None:
         st.error(f"Error loading data: {e}")
         st.stop()
 
+    # Set n_times based on input data
+    n_times = X.shape[2]  # Dynamically set n_times to match input data (224 in this case)
+
     # Validate data shapes
-    if len(X.shape) != 3 or X.shape[1:] != (n_ch, n_times):
+    if len(X.shape) != 3 or X.shape[1] != n_ch:
         st.error(f"Invalid EEG data shape. Expected [n_trials, {n_ch}, {n_times}], got {X.shape}")
         st.stop()
     if len(y.shape) != 1 or len(y) != X.shape[0]:
@@ -93,7 +95,7 @@ if cleaned_eeg_file is not None and labels_file is not None:
 
     # Split data into train and test sets (same as training script)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, stratify=y, random_state=42
+        X, y, test_size=0.2, random_state=42
     )
     X_test = preprocess_eeg(X_test)
     y_test = torch.from_numpy(y_test).long()

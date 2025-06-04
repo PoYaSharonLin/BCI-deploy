@@ -1,6 +1,6 @@
 # BCI-deploy
 
-## VM 
+## virtual environment
 
 ```bash
 python3 -m venv venv
@@ -19,5 +19,5 @@ pip install -r requirements.txt
 ## Run the app
 
 ```bash
-streamlit run app.py
+streamlit run Home.py
 ```
